@@ -4,8 +4,17 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image
 import random
+import os, sys
 
 LARGEFONT = ("Inter", 80, 'bold')
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
 
 ## Exercise List & Categories ##
 
@@ -121,7 +130,6 @@ both_routines = {
     }
 }
 
-# Global variable to store the user's name
 user_name = ""
 goal = ""
 days = ""
@@ -165,7 +173,7 @@ class StartPage(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(dark_image=Image.open("assets/flex.png"), size=(250, 150))
+        arm_img = ctk.CTkImage(dark_image=Image.open(resource_path("assets/flex.png")), size=(250, 150))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -188,7 +196,6 @@ class StartPage(ctk.CTkFrame):
         self.grid_rowconfigure(1, weight=0)  # Middle row for label_2 
         self.grid_columnconfigure(0, weight=1)
 
-        # Optional: Center the contents within the top container frame if needed
         top_container.grid_rowconfigure(0, weight=1)
         top_container.grid_columnconfigure(0, weight=0)
         top_container.configure(fg_color="#4E4E4E")
@@ -255,7 +262,7 @@ class PageTwo(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(dark_image=Image.open("assets/flex.png"), size=(250, 150))
+        arm_img = ctk.CTkImage(dark_image=Image.open(resource_path("assets/flex.png")), size=(250, 150))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -319,7 +326,7 @@ class PageThree(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(dark_image=Image.open("assets/flex.png"), size=(250, 150))
+        arm_img = ctk.CTkImage(dark_image=Image.open(resource_path("assets/flex.png")), size=(250, 150))
 
         # Create a container frame for the top labels 
         top_container = ctk.CTkFrame(self)
@@ -363,7 +370,7 @@ class PageThree(ctk.CTkFrame):
         self.day_dropbox.grid(row=0, column=1, padx=10, pady=5)
 
         # Create button to trigger get_dropboxval function
-        confirm_button = ctk.CTkButton(self, text="Generate my program!", font=("Inter", 35, 'bold'), text_color="white", command=lambda: self.get_dropboxval())
+        confirm_button = ctk.CTkButton(self, text="Generate my routine!", font=("Inter", 35, 'bold'), text_color="white", command=lambda: self.get_dropboxval())
         confirm_button.grid(row=2, column=0, pady=(100, 0))
         confirm_button.configure(corner_radius=10, fg_color="#b5b5b5", hover_color="gray", text_color="black", height=80, width=250)
 
@@ -397,7 +404,7 @@ class PageFour(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(dark_image=Image.open("assets/flex.png"), size=(130, 75))
+        arm_img = ctk.CTkImage(dark_image=Image.open(resource_path("assets/flex.png")), size=(130, 75))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -475,7 +482,7 @@ class PageFour(ctk.CTkFrame):
         width = pic_frame.winfo_width()
         height = pic_frame.winfo_height()
 
-        self.image = "assets/full.png"
+        self.image = resource_path("assets/full.png")
 
         # Adjust the image size proportionally
         img_width = width * 1.8  # Use 90% of the width
@@ -486,7 +493,7 @@ class PageFour(ctk.CTkFrame):
         
     def update_img(self, muscle_group):
         # Logic to update image based on muscle_group
-        self.image = f"{muscle_group}.png"
+        self.image = resource_path(f"{muscle_group}.png")
         print("new image is", self.image)
 
 
@@ -601,4 +608,3 @@ app.resizable(width=False, height=False)
 app.configure(bg="#32a852")
 
 app.mainloop()
-
