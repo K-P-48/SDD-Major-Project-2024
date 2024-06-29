@@ -175,7 +175,7 @@ class StartPage(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(Image.open(resource_path("assets/flex.png")), size=(250, 150))
+        arm_img = ctk.CTkImage(Image.open(resource_path("images/flex.png")), size=(250, 150))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -214,8 +214,8 @@ class PageOne(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(Image.open("assets/flex.png"), size=(250, 150))
-
+        arm_img = ctk.CTkImage(Image.open(resource_path("images/flex.png")), size=(250, 150))
+        
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
         top_container.grid(row=0, column=0, pady=(100, 0), padx=(0, 100))
@@ -264,7 +264,7 @@ class PageTwo(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(Image.open(resource_path("assets/flex.png")), size=(250, 150))
+        arm_img = ctk.CTkImage(Image.open(resource_path("images/flex.png")), size=(250, 150))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -328,7 +328,7 @@ class PageThree(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(Image.open(resource_path("assets/flex.png")), size=(250, 150))
+        arm_img = ctk.CTkImage(Image.open(resource_path("images/flex.png")), size=(250, 150))
 
         # Create a container frame for the top labels 
         top_container = ctk.CTkFrame(self)
@@ -406,7 +406,7 @@ class PageFour(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(Image.open(resource_path("assets/flex.png")), size=(130, 75))
+        arm_img = ctk.CTkImage(Image.open(resource_path("images/flex.png")), size=(130, 75))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -484,7 +484,7 @@ class PageFour(ctk.CTkFrame):
         width = pic_frame.winfo_width()
         height = pic_frame.winfo_height()
 
-        self.image = resource_path("assets/full.png")
+        self.image = resource_path("images/full.png")
 
         # Adjust the image size proportionally
         img_width = width * 1.8  # Use 90% of the width
@@ -495,7 +495,7 @@ class PageFour(ctk.CTkFrame):
         
     def update_img(self, muscle_group):
         # Logic to update image based on muscle_group
-        self.image = resource_path(f"assets/{muscle_group}.png")
+        self.image = resource_path(f"images/{muscle_group}.png")
         print("new image is", self.image)
 
 
