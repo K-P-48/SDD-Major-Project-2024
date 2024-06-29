@@ -9,11 +9,13 @@ import os, sys
 LARGEFONT = ("Inter", 80, 'bold')
 
 def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
     except Exception:
         base_path = os.path.abspath(".")
-    
+
     return os.path.join(base_path, relative_path)
 
 ## Exercise List & Categories ##
@@ -173,7 +175,7 @@ class StartPage(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(dark_image=Image.open(resource_path("assets/flex.png")), size=(250, 150))
+        arm_img = ctk.CTkImage(Image.open(resource_path("assets/flex.png")), size=(250, 150))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -212,7 +214,7 @@ class PageOne(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(dark_image=Image.open("assets/flex.png"), size=(250, 150))
+        arm_img = ctk.CTkImage(Image.open("assets/flex.png"), size=(250, 150))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -262,7 +264,7 @@ class PageTwo(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(dark_image=Image.open(resource_path("assets/flex.png")), size=(250, 150))
+        arm_img = ctk.CTkImage(Image.open(resource_path("assets/flex.png")), size=(250, 150))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -326,7 +328,7 @@ class PageThree(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(dark_image=Image.open(resource_path("assets/flex.png")), size=(250, 150))
+        arm_img = ctk.CTkImage(Image.open(resource_path("assets/flex.png")), size=(250, 150))
 
         # Create a container frame for the top labels 
         top_container = ctk.CTkFrame(self)
@@ -404,7 +406,7 @@ class PageFour(ctk.CTkFrame):
         self.configure(fg_color="#4E4E4E")
 
         # Load and create the arm image
-        arm_img = ctk.CTkImage(dark_image=Image.open(resource_path("assets/flex.png")), size=(130, 75))
+        arm_img = ctk.CTkImage(Image.open(resource_path("assets/flex.png")), size=(130, 75))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
@@ -487,13 +489,13 @@ class PageFour(ctk.CTkFrame):
         # Adjust the image size proportionally
         img_width = width * 1.8  # Use 90% of the width
         img_height = height * 2.4  # Use 90% of the height
-        muscle_img = ctk.CTkImage(light_image=Image.open(self.image), size=(int(img_width), int(img_height)))
+        muscle_img = ctk.CTkImage(Image.open(self.image), size=(int(img_width), int(img_height)))
         muscle_img_label = ctk.CTkLabel(pic_frame, text="", image=muscle_img)
         muscle_img_label.grid(row=1, column=0, pady=5, padx=(0,10), sticky='nsew')
         
     def update_img(self, muscle_group):
         # Logic to update image based on muscle_group
-        self.image = resource_path(f"{muscle_group}.png")
+        self.image = resource_path(f"assets/{muscle_group}.png")
         print("new image is", self.image)
 
 
