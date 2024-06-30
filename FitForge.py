@@ -252,7 +252,8 @@ class PageOne(ctk.CTkFrame):
 
     def save_name_and_next(self):
         global user_name
-        user_name = self.name_entry.get().title()
+        entered_name = self.name_entry.get().title()
+        user_name = entered_name if entered_name else "User"
         self.controller.show_frame("PageTwo")
 
 
