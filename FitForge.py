@@ -22,7 +22,7 @@ def resource_path(relative_path):
 
 # All exercises
 exc = [
-    "Bench Press", "Squat", "Deadlift", "BB Row", "Leg Press", "Leg Curl", "Romanian Deadlift", "BB Overhead Press", "Incline DB Press", "Machine Chest Press", "Chest Fly", "Chest Dips", "Lat Pulldown", "DB Row", "Pull Up", "Rack Pull", "Cable Row", 
+    "Blank", "Bench Press", "Squat", "Deadlift", "BB Row", "Leg Press", "Leg Curl", "Romanian Deadlift", "BB Overhead Press", "Incline DB Press", "Machine Chest Press", "Chest Fly", "Chest Dips", "Lat Pulldown", "DB Row", "Pull Up", "Rack Pull", "Cable Row", 
     "JM Press", "Tricep Extension", "Tricep Dips", "Skull Crusher", "DB Curl", "BB Curl", "Preacher Curl", "Hammer Curl", "Shoulder Press Machine", "DB Overhead Press", "Leg Extension", "Lunge", "DB Split Squat", "DB Romanian Deadlift", "Seated Calf Raises", "Standing calf Raises"
     ]
 
@@ -215,7 +215,7 @@ class PageOne(ctk.CTkFrame):
 
         # Load and create the arm image
         arm_img = ctk.CTkImage(Image.open(resource_path("images/flex.png")), size=(250, 150))
-        
+
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
         top_container.grid(row=0, column=0, pady=(100, 0), padx=(0, 100))
@@ -252,7 +252,7 @@ class PageOne(ctk.CTkFrame):
 
     def save_name_and_next(self):
         global user_name
-        user_name = self.name_entry.get()
+        user_name = self.name_entry.get().title()
         self.controller.show_frame("PageTwo")
 
 
@@ -368,8 +368,8 @@ class PageThree(ctk.CTkFrame):
         top_container.configure(fg_color="#4E4E4E")
 
         # Create ComboBox for selecting days
-        self.day_dropbox = ctk.CTkComboBox(item_container, values=['2','3','4'], font=("Inter", 30), state="normal")
-        self.day_dropbox.grid(row=0, column=1, padx=10, pady=5)
+        self.day_dropbox = ctk.CTkComboBox(item_container, values=['2', '3', '4'], font=("Inter", 30), state="normal", width=125)
+        self.day_dropbox.grid(row=0, column=1, padx=15, pady=(10,0))
 
         # Create button to trigger get_dropboxval function
         confirm_button = ctk.CTkButton(self, text="Generate my routine!", font=("Inter", 35, 'bold'), text_color="white", command=lambda: self.get_dropboxval())
@@ -395,30 +395,38 @@ class PageThree(ctk.CTkFrame):
 def identify_preference():
     global user_pref
     user_pref = [days, goal]
-    print(user_pref)
 
 class PageFour(ctk.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
         self.user_name = ""  # Initialize with an empty username
+        self.current_routine = {}
 
         self.configure(fg_color="#4E4E4E")
+
+        text_size = int(self.controller.s_height / 15)
 
         # Load and create the arm image
         arm_img = ctk.CTkImage(Image.open(resource_path("images/flex.png")), size=(130, 75))
 
         # Create a container frame for the top labels
         top_container = ctk.CTkFrame(self)
-        top_container.grid(row=0, column=0, pady=(20, 0), padx=(0, 0), columnspan=2, sticky="nsew")
+        top_container.grid(row=0, column=0, pady=(20, 0), padx=(0, 0), sticky="ew")
+        top_container.grid_columnconfigure(0, weight=1)
+        top_container.grid_columnconfigure(1, weight=0)
+        top_container.grid_columnconfigure(2, weight=1)
 
-        text_size = int(self.controller.s_height / 15)
+        # Spacer to center the content
+        ctk.CTkLabel(top_container, text="").grid(row=0, column=0, padx=(0, 0))
 
         # Create the labels inside the top container frame
         arm_label = ctk.CTkLabel(top_container, text="", image=arm_img)
-        arm_label.grid(row=0, column=0, padx=(0, 0))
+        arm_label.grid(row=0, column=1, padx=(0, 5), sticky='e')
+
         label = ctk.CTkLabel(top_container, text="FitForge", font=("Inter", text_size, 'bold'))
-        label.grid(row=0, column=1, padx=(5, 0))
+        label.grid(row=0, column=2, padx=(0, 0), sticky='w')
+
 
         # Main container for the two frames
         main_container = ctk.CTkFrame(self)
@@ -460,7 +468,6 @@ class PageFour(ctk.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
 
         top_container.grid_rowconfigure(0, weight=1)
-        top_container.grid_columnconfigure(0, weight=0)
 
         pic_frame.grid_rowconfigure(0, weight=1)
         pic_frame.grid_columnconfigure(0, weight=1)
@@ -486,18 +493,23 @@ class PageFour(ctk.CTkFrame):
 
         self.image = resource_path("images/full.png")
 
-        # Adjust the image size proportionally
-        img_width = width * 1.8  # Use 90% of the width
-        img_height = height * 2.4  # Use 90% of the height
-        muscle_img = ctk.CTkImage(Image.open(self.image), size=(int(img_width), int(img_height)))
-        muscle_img_label = ctk.CTkLabel(pic_frame, text="", image=muscle_img)
-        muscle_img_label.grid(row=1, column=0, pady=5, padx=(0,10), sticky='nsew')
-        
-    def update_img(self, muscle_group):
-        # Logic to update image based on muscle_group
-        self.image = resource_path(f"images/{muscle_group}.png")
-        print("new image is", self.image)
+        export_button = ctk.CTkButton(top_container, text="Export", font=("Inter", 15), text_color="black", command=lambda: self.export_routine())
+        export_button.grid(row=0, column=3, padx=(10, 20), pady=(10, 10), sticky='e')
+        export_button.configure(fg_color="#b5b5b5", hover_color="gray")
 
+        # Adjust the image size proportionally
+        self.img_width = width * 1.8  # Use 90% of the width
+        self.img_height = height * 2.4  # Use 90% of the height
+        
+        self.muscle_img = ctk.CTkImage(Image.open(self.image), size=(self.img_width, self.img_height))
+        self.muscle_img_label = ctk.CTkLabel(pic_frame, text="", image=self.muscle_img)
+        self.muscle_img_label.grid(row=1, column=0, pady=5, padx=(0, 10), sticky='nsew')
+
+    def update_img(self, muscle_group):
+        new_image_path = resource_path(f"images/{muscle_group}.png")
+        new_image = ctk.CTkImage(Image.open(new_image_path), size=(self.img_width, self.img_height))
+        self.muscle_img_label.configure(image=new_image)
+        self.muscle_img_label.image = new_image  # Keep a reference to avoid garbage collection
 
     def get_exer_info(self):
         selected_exercise = self.exc_info.get()
@@ -505,7 +517,6 @@ class PageFour(ctk.CTkFrame):
             if selected_exercise in exercises:
                 # Found the muscle group
                 self.update_img(muscle_group)  # Update the image with the muscle group name
-                print("muscle group is", muscle_group)
                 break  # No need to continue once the muscle group is found
 
     def set_username(self, username):
@@ -513,11 +524,11 @@ class PageFour(ctk.CTkFrame):
         self.name_label.configure(text=f"{self.user_name}'s Weekly Routine", text_color="black")
 
     def update_tabs(self, goal, days):
-        print("update_tabs called with goal:", goal, "and days:", days)  # Debugging output
-
         # Clear any existing exercises
         for widget in self.exercise_frame.winfo_children():
             widget.destroy()
+
+        self.current_routine = {str(day): [] for day in range(1, days + 1)}
 
         # Determine which routines to use based on user's goal
         if goal == "s":
@@ -526,9 +537,6 @@ class PageFour(ctk.CTkFrame):
             routines = muscle_routines.get(days, {})
         elif goal == "b":
             routines = both_routines.get(days, {})
-        else:
-            print("Invalid goal provided")  # Debugging output
-            return  # Handle invalid goal
 
         row_counter = 0
         # Populate the exercise_frame with exercises
@@ -538,6 +546,8 @@ class PageFour(ctk.CTkFrame):
             row_counter += 1
 
             exercises = routines.get(str(i + 1), [])  # Get exercises for current day
+            self.current_routine[str(i + 1)] = exercises
+
             for index, exercise in enumerate(exercises, start=1):
                 exercise_frame = ctk.CTkFrame(self.exercise_frame)
                 exercise_frame.grid(row=row_counter, column=0, columnspan=1, padx=20, pady=2, sticky="w")
@@ -559,7 +569,7 @@ class PageFour(ctk.CTkFrame):
 
                 # Check if exercise is not empty to show "Add Exercise" button
                 if not exercise:  
-                    add_button = ctk.CTkButton(exercise_frame, text="Add Exercise", command=lambda ex_frame=exercise_frame: self.add_exercise(ex_frame), font=("Inter", 15), text_color = "black")
+                    add_button = ctk.CTkButton(exercise_frame, text="Add Exercise", command=lambda ex_frame=exercise_frame: self.add_exercise(exercise_frame), font=("Inter", 15), text_color="black")
                     add_button.grid(row=0, column=2, padx=(10, 0))
                     add_button.configure(fg_color="#b5b5b5", hover_color="gray")
 
@@ -569,8 +579,8 @@ class PageFour(ctk.CTkFrame):
         self.canvas.update_idletasks()
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
+
     def remove_exercise(self, exercise_frame, remove_frame, day, exercise_index):
-        print(f"Removing exercise on Day {exercise_frame.day}, Exercise {exercise_frame.exercise_index}")  # Debugging output
         for widget in exercise_frame.winfo_children():
             widget.destroy()
         for widget in remove_frame.winfo_children():
@@ -584,6 +594,13 @@ class PageFour(ctk.CTkFrame):
         new_exc_selec = ctk.CTkComboBox(exercise_frame, values=exc, font=("Inter", 15), state="normal") 
         new_exc_selec.grid(row=0, column=1, sticky="w")
         exercise_frame.new_exc_selec = new_exc_selec  # Store the combobox as an attribute of exercise_frame
+
+        if 0 <= exercise_index - 1 < len(self.current_routine[str(day)]):
+            # Remove the exercise from the current routine
+            self.current_routine[str(day)].pop(exercise_index - 1)  # Remove the exercise
+            print(self.current_routine)  # Debugging output
+            print("Removed exercise at index", exercise_index - 1)
+        
 
     def add_exercise(self, exercise_frame, remove_frame):
         new_exercise = exercise_frame.new_exc_selec.get()
@@ -600,6 +617,24 @@ class PageFour(ctk.CTkFrame):
         remove_button = ctk.CTkButton(remove_frame, text="Remove", command=lambda ex_frame=exercise_frame, rm_frame=remove_frame: self.remove_exercise(ex_frame, rm_frame, day=exercise_frame.day, exercise_index=exercise_frame.exercise_index), font=("Inter", 15))
         remove_button.grid(row=0, column=0, sticky="e")
         remove_button.configure(fg_color="#b5b5b5", hover_color="gray", text_color="black")
+
+        # Update current routine data structure
+        self.current_routine[str(exercise_frame.day)][exercise_frame.exercise_index - 1] = new_exercise
+    
+    def export_routine(self):
+        filename = f"{self.user_name}_routine.txt"
+
+        with open(filename, 'w') as file:
+            file.write(f"Routine for {self.user_name}:\n\n")
+            for day, exercises in self.current_routine.items():
+                file.write(f"Day {day}:\n")
+                for exercise in exercises:
+                    if exercise and exercise.lower() != "blank":  # Check for non-empty and non-"blank" exercises
+                        file.write(f" - {exercise}\n")
+                file.write("\n")
+
+        messagebox.showinfo("Export Successful", f"Routine exported to {filename}")
+        print(self.current_routine)
 
 app = App()
 
